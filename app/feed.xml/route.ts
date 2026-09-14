@@ -1,9 +1,12 @@
 import { getAllVersions } from "@/lib/content";
+import { siteBasePath } from "@/lib/site";
 
 export const dynamic = "force-static";
 
 export function GET() {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://docs.example.com";
+  const base =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    `https://ahstream.github.io${siteBasePath}`;
   const entries = getAllVersions()
     .filter((item) => item.published)
     .sort((a, b) => String(b.published).localeCompare(String(a.published)))

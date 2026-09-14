@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { siteBasePath } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://docs.example.com",
+    process.env.NEXT_PUBLIC_SITE_URL ??
+      `https://ahstream.github.io${siteBasePath}`,
   ),
   title: {
     default: "Telia ACE Delivery Docs",

@@ -136,9 +136,7 @@ export function MarkdownContent({ html }: { html: string }) {
 
     return () => {
       cancelled = true;
-      window.setTimeout(() => {
-        roots.forEach((root) => root.unmount());
-      }, 0);
+      roots.forEach((root) => root.unmount());
     };
   }, []);
 

@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
 import { getAllVersions } from "@/lib/content";
+import { siteBasePath } from "@/lib/site";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://docs.example.com";
+  const base =
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    `https://ahstream.github.io${siteBasePath}`;
   return getAllVersions().map((item) => ({
     url: `${base}/docs/${item.section ? "general" : "topics"}/${item.section ?? item.topic}/${item.slug}/v${item.version}`,
     lastModified: item.published ? new Date(item.published) : undefined,

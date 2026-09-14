@@ -5,6 +5,7 @@ import type { DocumentVersion } from "@/lib/types";
 import { MarkdownContent } from "./markdown-content";
 import { VersionSelector } from "./version-selector";
 import { DocsLayout } from "./docs-layout";
+import { siteBasePath, withBasePath } from "@/lib/site";
 
 export async function DocumentPage({
   document,
@@ -13,7 +14,7 @@ export async function DocumentPage({
   document: DocumentVersion;
   versions: DocumentVersion[];
 }) {
-  const assetBase = `/assets/${document.section ? "general" : "topics"}/${document.section ?? document.topic}/${document.slug}`;
+  const assetBase = `${siteBasePath}/assets/${document.section ? "general" : "topics"}/${document.section ?? document.topic}/${document.slug}`;
   const html = await renderMarkdown(document.content, assetBase);
   const currentIndex = versions.findIndex(
     (version) => version.version === document.version,
@@ -109,7 +110,7 @@ export async function DocumentPage({
             <section className="attachments">
               <p className="eyebrow">Attachments</p>
               {document.assets.map((asset) => (
-                <a href={asset.path} key={asset.path}>
+                <a href={withBasePath(asset.path)} key={asset.path}>
                   {asset.name} <span>{asset.type}</span>
                 </a>
               ))}
