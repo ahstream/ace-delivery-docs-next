@@ -99,6 +99,7 @@
 	margin-left: auto;
 	color: var(--muted);
 }
+.aside-links, .github-links { border-top: 0; }
 .document { max-width: none; }
 
 @media (max-width: 800px) {

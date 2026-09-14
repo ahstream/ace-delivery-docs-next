@@ -33,7 +33,7 @@ export async function DocumentPage({
   const base = `/docs/${document.section ? "general" : "topics"}/${document.section ?? document.topic}/${document.slug}`;
   const github = getGitHubUrls(document);
   return (
-    <DocsLayout headerLink={<a href={github.source}>GitHub ↗</a>}>
+    <DocsLayout>
       <div className="breadcrumbs">
         {getBreadcrumbs(document).map((crumb, index) => (
           <span key={crumb.label}>
