@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { getAllVersions } from "@/lib/content";
+import { siteBasePath } from "@/lib/site";
+import { PagefindSearch } from "@/components/pagefind-search";
 
 export default function SearchPage() {
   const documents = getAllVersions();
@@ -20,13 +22,7 @@ export default function SearchPage() {
           The production build generates a static Pagefind index with filters
           for category, topic, version, status, and tags.
         </p>
-        <div className="search-box">
-          <input
-            aria-label="Search documentation"
-            placeholder="Search documentation..."
-          />
-          <button type="button">Search</button>
-        </div>
+        <PagefindSearch basePath={siteBasePath} />
         <div className="search-hint">
           {documents.length} versioned pages will be indexed during CI.
         </div>

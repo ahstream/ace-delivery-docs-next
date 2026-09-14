@@ -19,7 +19,9 @@ export function DocsLayout({
         <nav>
           <Link href="/search">Search</Link>
           {headerLink ?? (
-            <a href="https://github.com/example/documentation">GitHub</a>
+            <a href="https://github.com/ahstream/ace-delivery-docs-next">
+              GitHub
+            </a>
           )}
         </nav>
       </header>

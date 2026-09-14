@@ -263,7 +263,7 @@ export function getBreadcrumbs(document: DocumentVersion): Breadcrumb[] {
 export function getGitHubUrls(document: DocumentVersion) {
   const base =
     process.env.NEXT_PUBLIC_GITHUB_REPOSITORY_URL ??
-    "https://github.com/example/documentation";
+    "https://github.com/ahstream/ace-delivery-docs-next";
   const encoded = document.sourcePath
     .split("/")
     .map(encodeURIComponent)

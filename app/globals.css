@@ -136,6 +136,11 @@
 .breadcrumbs { padding: 18px 0; }
 .section-heading { margin-bottom: 20px; }
 .doc-card { padding: 18px; }
+.search-results { display: grid; gap: 10px; margin-top: 24px; }
+.search-results a { display: grid; gap: 6px; border: 1px solid var(--line); padding: 16px; }
+.search-results a:hover { border-color: var(--green); }
+.search-results strong { font-size: 15px; }
+.search-results span { color: var(--muted); font-size: 13px; line-height: 1.5; }
 
 @media (max-width: 800px) {
 	.shell { padding: 0 16px 36px; }
