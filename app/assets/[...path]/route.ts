@@ -28,7 +28,7 @@ async function listAssetPaths(
       if (entry.isDirectory())
         return listAssetPaths(
           fullPath,
-          insideAssets || entry.name === "assets",
+          insideAssets || entry.name === "assets" || entry.name === "images",
         );
       return insideAssets
         ? [path.relative(docsRoot, fullPath).split(path.sep)]

@@ -97,40 +97,44 @@ function listFiles(directory: string): string[] {
   });
 }
 
+function listAssetFiles(directory: string): string[] {
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(directory, entry.name);
+    return entry.isDirectory() ? listAssetFiles(fullPath) : [fullPath];
+  });
+}
+
 function discoverAssets(documentDirectory: string): AssetMetadata[] {
   const assetsDirectory = path.join(documentDirectory, "assets");
   if (!fs.existsSync(assetsDirectory)) return [];
-  return fs
-    .readdirSync(assetsDirectory, { withFileTypes: true })
-    .flatMap((entry) => {
-      const absolutePath = path.join(assetsDirectory, entry.name);
-      if (entry.isDirectory()) return [];
-      const extension = path.extname(entry.name).slice(1).toLowerCase();
-      if (!assetExtensions.has(extension)) return [];
-      const isDiagram =
-        ["mmd", "puml", "drawio", "svg"].includes(extension) ||
-        entry.name.includes("diagram");
-      const type = isDiagram
-        ? "diagram"
-        : ["png", "jpg", "jpeg", "webp", "svg"].includes(extension)
-          ? "image"
-          : ["pdf", "docx", "pptx", "xlsx"].includes(extension)
-            ? "document"
-            : ["json", "yaml", "yml", "xml", "csv"].includes(extension)
-              ? "data"
-              : ["zip", "excalidraw"].includes(extension)
-                ? "archive"
-                : "other";
-      return [
-        {
-          name: entry.name,
-          path: `/assets/${path.relative(docsRoot, absolutePath).replaceAll("\\", "/")}`,
-          type,
-          extension,
-          isDiagram,
-        },
-      ];
-    });
+  return listAssetFiles(assetsDirectory).flatMap((absolutePath) => {
+    const name = path.basename(absolutePath);
+    const extension = path.extname(name).slice(1).toLowerCase();
+    if (!assetExtensions.has(extension)) return [];
+    const isDiagram =
+      ["mmd", "puml", "drawio", "svg"].includes(extension) ||
+      name.includes("diagram");
+    const type = isDiagram
+      ? "diagram"
+      : ["png", "jpg", "jpeg", "webp", "svg"].includes(extension)
+        ? "image"
+        : ["pdf", "docx", "pptx", "xlsx"].includes(extension)
+          ? "document"
+          : ["json", "yaml", "yml", "xml", "csv"].includes(extension)
+            ? "data"
+            : ["zip", "excalidraw"].includes(extension)
+              ? "archive"
+              : "other";
+    return [
+      {
+        name,
+        path: `/assets/${path.relative(docsRoot, absolutePath).replaceAll("\\", "/")}`,
+        type,
+        extension,
+        isDiagram,
+      },
+    ];
+  });
 }
 
 function parseFile(filePath: string): DocumentVersion {

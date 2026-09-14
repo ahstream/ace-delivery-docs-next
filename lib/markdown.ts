@@ -49,7 +49,7 @@ export async function renderMarkdown(
     .use(rehypeStringify, { allowDangerousHtml: true })
     .process(markdown);
   return String(result).replaceAll(
-    /((?:src|href|data-excalidraw)=['"])(\.\/)?assets\//g,
-    `$1${assetBase}/assets/`,
+    /((?:src|href|data-excalidraw)=['"])(\.\/)?(assets|images)\//g,
+    `$1${assetBase}/$3/`,
   );
 }
