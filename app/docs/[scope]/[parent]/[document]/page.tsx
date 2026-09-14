@@ -1,5 +1,29 @@
 import { notFound, redirect } from "next/navigation";
-import { getDocumentVersions, getLatestPublishedVersion } from "@/lib/content";
+import {
+  getAllVersions,
+  getDocumentVersions,
+  getLatestPublishedVersion,
+} from "@/lib/content";
+
+export function generateStaticParams() {
+  const documents = new Map<
+    string,
+    {
+      scope: string;
+      parent: string;
+      document: string;
+    }
+  >();
+
+  for (const item of getAllVersions()) {
+    const scope = item.section ? "general" : "topics";
+    const parent = item.section ?? item.topic ?? "";
+    const key = `${scope}/${parent}/${item.slug}`;
+    documents.set(key, { scope, parent, document: item.slug });
+  }
+
+  return [...documents.values()];
+}
 
 export default async function DocumentRedirect({
   params,

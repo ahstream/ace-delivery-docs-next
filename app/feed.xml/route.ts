@@ -1,5 +1,7 @@
 import { getAllVersions } from "@/lib/content";
 
+export const dynamic = "force-static";
+
 export function GET() {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://docs.example.com";
   const entries = getAllVersions()
