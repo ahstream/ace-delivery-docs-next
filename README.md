@@ -1,4 +1,4 @@
-# Northstar Docs
+# Lorem Ipsum
 
 Northstar is a static-first Next.js documentation platform where every document owns its own version history. A release is a Markdown file with frontmatter, not a global site snapshot.
 
