@@ -7,6 +7,15 @@ import { VersionSelector } from "./version-selector";
 import { DocsLayout } from "./docs-layout";
 import { siteBasePath, withBasePath } from "@/lib/site";
 
+function formatApprovalDate(value?: string): string {
+  if (!value) return "";
+  const date = new Date(
+    /^\d{4}-\d{2}-\d{2}$/.test(value) ? `${value}T00:00:00` : value,
+  );
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toDateString();
+}
+
 export async function DocumentPage({
   document,
   versions,
@@ -40,9 +49,6 @@ export async function DocumentPage({
       <div className="doc-layout">
         <aside className="doc-aside">
           <p className="eyebrow">Document versions</p>
-          <label className="version-label" htmlFor="version">
-            This document
-          </label>
           <VersionSelector
             base={base}
             current={document.version}
@@ -95,7 +101,7 @@ export async function DocumentPage({
               <span>APPROVAL</span>
               <strong>
                 {document.approved
-                  ? `Approved ${document.approvedDate ?? ""}`
+                  ? `Approved ${formatApprovalDate(document.approvedDate)}`
                   : "Pending review"}
               </strong>
             </div>
