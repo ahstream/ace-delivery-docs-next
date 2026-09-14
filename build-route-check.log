@@ -1,0 +1,24 @@
+
+> ace-delivery-docs-test@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.3.5 (webpack)
+⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: Your organization used Device Guard to block this app. Contact your support person for more info.
+\\?\C:\GitHub\ace-delivery-docs-test\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+✓ Running next.config.ts took 1029ms
+  Skipping creating a lockfile at C:\GitHub\ace-delivery-docs-test\.next\lock because we're using WASM bindings
+
+  Creating an optimized production build ...
+⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: Your organization used Device Guard to block this app. Contact your support person for more info.
+\\?\C:\GitHub\ace-delivery-docs-test\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: Your organization used Device Guard to block this app. Contact your support person for more info.
+\\?\C:\GitHub\ace-delivery-docs-test\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+⚠ Attempted to load @next/swc-win32-x64-msvc, but an error occurred: Your organization used Device Guard to block this app. Contact your support person for more info.
+\\?\C:\GitHub\ace-delivery-docs-test\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node
+✓ Compiled successfully in 7.8s
+  Running TypeScript ...
+components/markdown-content.tsx(19,36): error TS2339: Property 'elements' does not exist on type 'ExcalidrawInitialData'.
+components/markdown-content.tsx(20,36): error TS2339: Property 'appState' does not exist on type 'ExcalidrawInitialData'.
+components/markdown-content.tsx(21,33): error TS2339: Property 'files' does not exist on type 'ExcalidrawInitialData'.
+Failed to type check.
+

@@ -1,0 +1,18 @@
+sequenceDiagram
+    autonumber
+    participant Visitor
+    participant Widget as ACE Widget
+    participant Hub as Identity Hub
+    participant Engine as Chat Engine
+    participant Interact as ACE Interact
+
+    Visitor->>Widget: Start identification
+    Widget->>Hub: Request authentication
+    Hub-->>Visitor: Open identity provider
+    Visitor->>Hub: Authenticate
+    Hub-->>Widget: Identification token
+    Widget->>Engine: Submit JWT
+    Engine->>Hub: Verify and decrypt token
+    Hub-->>Engine: Verified identity data
+    Engine->>Interact: Map verified data to contact fields
+    Interact-->>Visitor: Agent sees identified contact

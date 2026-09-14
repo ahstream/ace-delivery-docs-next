@@ -1,4 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Northstar Docs
+
+Northstar is a static-first Next.js documentation platform where every document owns its own version history. A release is a Markdown file with frontmatter, not a global site snapshot.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  A[GitHub Markdown] --> B[gray-matter metadata]
+  B --> C[Content services]
+  C --> D[Next.js generateStaticParams]
+  D --> E[Immutable document URLs]
+  C --> F[remark + rehype]
+  F --> G[Static HTML]
+  G --> H[Pagefind]
+  H --> I[Search index]
+```
+
+The document identity is `scope / parent / slug`; the version is resolved independently with semantic versioning. Versionless routes redirect to the highest published version. Version routes are generated for every Markdown file and remain addressable after newer versions ship.
+
+## Local development
+
+```bash
+npm install
+npm run validate:docs
+npm run dev
+```
+
+The sample content lives under `docs/general` and `docs/topics`. Put shared assets beside a document in its `assets/` directory. The content service discovers supported assets and exposes stable `/assets/...` paths.
+
+## GitOps workflow
+
+1. Add or change a versioned Markdown file in a pull request.
+2. Include required frontmatter: `id`, `title`, `version`, `status`, `author`, and `owner`.
+3. Set `status: review` until ownership and approval metadata are complete.
+4. Merge to `main`; GitHub Actions validates metadata, type-checks, lints, builds SSG output, and creates the Pagefind index.
+5. Deploy the generated Next.js output to the hosting provider of choice.
+
+Set `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_GITHUB_REPOSITORY_URL` in the deployment environment. The GitHub URL helpers then generate edit, source, history, and pull request links automatically.This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
