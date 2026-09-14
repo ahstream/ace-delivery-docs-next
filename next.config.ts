@@ -1,9 +1,12 @@
 import type { NextConfig } from "next";
-import { siteBasePath } from "./lib/site";
+
+const siteBasePath =
+  process.env.NEXT_PUBLIC_BASE_PATH ?? "/ace-delivery-docs-next";
 
 const nextConfig: NextConfig = {
   output: "export",
   basePath: siteBasePath,
+  assetPrefix: siteBasePath,
   trailingSlash: true,
 };
 
