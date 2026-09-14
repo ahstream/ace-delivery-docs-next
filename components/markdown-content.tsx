@@ -3,7 +3,8 @@
 import mermaid from "mermaid";
 import dynamic from "next/dynamic";
 import { createRoot, type Root } from "react-dom/client";
-import { useEffect, useRef, type ComponentProps } from "react";
+import { useEffect, useRef } from "react";
+import type { ExcalidrawInitialDataState } from "@excalidraw/excalidraw/types";
 import "@excalidraw/excalidraw/index.css";
 
 const Excalidraw = dynamic(
@@ -11,14 +12,10 @@ const Excalidraw = dynamic(
   { ssr: false },
 );
 
-type ExcalidrawInitialData = NonNullable<
-  ComponentProps<typeof Excalidraw>["initialData"]
->;
-
 interface ExcalidrawScene {
-  elements?: ExcalidrawInitialData["elements"];
-  appState?: ExcalidrawInitialData["appState"];
-  files?: ExcalidrawInitialData["files"];
+  elements?: ExcalidrawInitialDataState["elements"];
+  appState?: ExcalidrawInitialDataState["appState"];
+  files?: ExcalidrawInitialDataState["files"];
 }
 
 export function MarkdownContent({ html }: { html: string }) {

@@ -17,6 +17,33 @@ const contentTypes: Record<string, string> = {
   csv: "text/csv",
 };
 
+async function listAssetPaths(
+  directory: string,
+  insideAssets = false,
+): Promise<string[][]> {
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+  const paths = await Promise.all(
+    entries.map(async (entry) => {
+      const fullPath = path.join(directory, entry.name);
+      if (entry.isDirectory())
+        return listAssetPaths(
+          fullPath,
+          insideAssets || entry.name === "assets",
+        );
+      return insideAssets
+        ? [path.relative(docsRoot, fullPath).split(path.sep)]
+        : [];
+    }),
+  );
+  return paths.flat();
+}
+
+export async function generateStaticParams() {
+  return (await listAssetPaths(docsRoot)).map((assetPath) => ({
+    path: assetPath,
+  }));
+}
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ path: string[] }> },

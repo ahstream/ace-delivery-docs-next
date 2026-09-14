@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getAllVersions } from "@/lib/content";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://docs.example.com";
   return getAllVersions().map((item) => ({

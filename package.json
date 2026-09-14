@@ -9,7 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "validate:docs": "node scripts/validate-docs.mjs",
-    "pagefind": "pagefind --site .next/server/app"
+    "pagefind": "pagefind --site out"
   },
   "dependencies": {
     "@excalidraw/excalidraw": "^0.18.1",
