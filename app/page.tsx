@@ -6,9 +6,9 @@ export default function Home() {
   const summaries = getSummaries();
   return (
     <DocsLayout>
-      <div className="page-heading">
+      <div className="page-heading home-page-heading">
         <p className="eyebrow">Documentation library</p>
-        <h1>Delivery documentation</h1>
+        <h1>ACE Delivery Documentation</h1>
         <p className="hero-copy">
           Versioned guidance for building, configuring, and operating Telia ACE.
         </p>

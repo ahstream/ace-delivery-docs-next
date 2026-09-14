@@ -70,7 +70,7 @@ function validateMetadata(
   return {
     id: String(data.id),
     title: String(data.title),
-    shortTitle: data.shortTitle ? String(data.shortTitle) : undefined,
+    navbarTitle: data.navbarTitle ? String(data.navbarTitle) : undefined,
     description: data.description ? String(data.description) : undefined,
     version: parseVersion(data.version),
     status,
@@ -83,6 +83,9 @@ function validateMetadata(
     supersedes: data.supersedes ? parseVersion(data.supersedes) : undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
     category: data.category ? String(data.category) : undefined,
+    navbarCategory: data.navbarCategory
+      ? String(data.navbarCategory)
+      : undefined,
   };
 }
 
@@ -215,9 +218,10 @@ export function getSummaries(): DocumentSummary[] {
       id: latest.id,
       slug: latest.slug,
       title: latest.title,
-      shortTitle: latest.shortTitle,
+      navbarTitle: latest.navbarTitle,
       description: latest.description,
       category: latest.category,
+      navbarCategory: latest.navbarCategory,
       topic: latest.topic,
       section: latest.section,
       latestVersion: latest.version,
@@ -234,16 +238,16 @@ export function getNavigation(): NavigationNode[] {
     summaries
       .filter((item) => (scope === "general" ? item.section : item.topic))
       .forEach((item) => {
-        const key = item.section ?? item.topic ?? "";
+        const key = item.navbarCategory ?? item.section ?? item.topic ?? "";
         groups.set(key, [...(groups.get(key) ?? []), item]);
       });
     return [...groups.entries()].map(([group, documents]) => ({
       label: group.replaceAll("-", " "),
       kind: "group" as const,
       children: documents.map((document) => ({
-        label: document.shortTitle ?? document.title,
+        label: document.navbarTitle ?? document.title,
         kind: "document" as const,
-        href: `/docs/${scope}/${group}/${document.slug}`,
+        href: `/docs/${scope}/${document.section ?? document.topic}/${document.slug}`,
       })),
     }));
   };

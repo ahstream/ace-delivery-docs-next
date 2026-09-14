@@ -58,14 +58,17 @@
 .nav-category a {
 	display: block;
 	margin: 8px 0;
+	padding-left: 12px;
 	color: var(--muted);
 	font-size: 13px;
 	line-height: 1.4;
 }
 .nav-category a:hover, .topbar nav a:hover { color: var(--green); }
 .docs-content { min-width: 0; }
+.admin-layout { display: block; }
 .page-heading { margin: 10px 0 58px; max-width: 720px; }
 .page-heading h1 { font-size: clamp(42px, 6vw, 72px); }
+.home-page-heading h1 { font-size: 56px; white-space: nowrap; }
 .page-heading .hero-copy { margin-bottom: 0; }
 .home-content { border-top: 1px solid var(--line); padding-top: 30px; }
 .home-grid { display: block; border-top: 0; padding-top: 0; }
@@ -113,11 +116,16 @@
 	.nav-group { margin-bottom: 12px; }
 	.nav-category { margin-bottom: 12px; }
 	.page-heading { margin: 4px 0 40px; }
+	.home-page-heading h1 { font-size: 40px; }
 	.doc-aside {
 		align-items: flex-start;
 		margin-bottom: 34px;
 	}
 	.doc-aside .github-links { margin-left: 0; }
+}
+
+@media (max-width: 480px) {
+	.home-page-heading h1 { font-size: 28px; }
 }
 
 /* Compact documentation spacing */
@@ -142,6 +150,24 @@
 .search-results a:hover { border-color: var(--green); }
 .search-results strong { font-size: 15px; }
 .search-results span { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.admin-toolbar { display: flex; justify-content: flex-end; margin: -18px 0 10px; }
+.admin-checkbox { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; cursor: pointer; }
+.admin-checkbox input { accent-color: var(--green); margin: 0; }
+.admin-table-wrap { overflow-x: auto; border-top: 2px solid var(--ink); }
+.admin-table { width: 100%; min-width: 1180px; border-collapse: collapse; font-size: 11px; line-height: 1.3; }
+.admin-table caption { padding: 0 0 8px; color: var(--muted); text-align: left; font: 500 10px/1.2 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .08em; }
+.admin-table th, .admin-table td { border-bottom: 1px solid var(--line); padding: 7px 8px; text-align: left; vertical-align: top; }
+.admin-table thead th { color: var(--muted); font: 500 9px/1.2 "DM Mono", monospace; text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+.admin-sort-button { display: inline-flex; align-items: center; gap: 5px; border: 0; padding: 0; background: transparent; color: inherit; font: inherit; text-transform: inherit; letter-spacing: inherit; cursor: pointer; }
+.admin-sort-button:hover { color: var(--green); }
+.admin-sort-button span { color: var(--green); font-size: 12px; }
+.admin-table tbody th { min-width: 180px; font-weight: 700; }
+.admin-table tbody tr:hover td, .admin-table tbody tr:hover th { background: #fbfdfb; }
+.admin-table a { color: var(--blue); }
+.admin-table a:hover { color: var(--amber); }
+.admin-source { color: var(--muted); font: 10px/1.3 "DM Mono", monospace; }
+.admin-source { max-width: 220px; overflow-wrap: anywhere; }
+.admin-table .status { display: inline-block; white-space: nowrap; }
 
 .topbar nav {
 	align-self: stretch;
@@ -241,4 +267,12 @@
 	.document .lede { margin-bottom: 20px; }
 	.prose h2 { margin-top: 32px; }
 	.prose h3 { margin-top: 24px; }
+}
+
+h1, .page-heading h1, .search-page h1 { font-size: 56px; }
+@media (max-width: 800px) {
+	h1, .page-heading h1, .search-page h1, .home-page-heading h1 { font-size: 40px; }
+}
+@media (max-width: 480px) {
+	h1, .page-heading h1, .search-page h1, .home-page-heading h1 { font-size: 28px; }
 }
