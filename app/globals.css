@@ -208,6 +208,28 @@
 .topbar nav { align-items: center; }
 .topbar nav a { display: inline-flex; align-items: center; line-height: 1; }
 
+/* Document spacing rhythm */
+.doc-aside { margin-bottom: 24px; padding-bottom: 14px; }
+.document-kicker { margin-bottom: 14px; }
+.document h1 { margin: 0 0 12px; }
+.document .lede { margin: 0 0 24px; }
+.meta-grid { margin-bottom: 12px; }
+.tag-row.large { margin-bottom: 8px; }
+.prose { line-height: 1.65; }
+.prose p { margin: 0 0 14px; }
+.prose h2 { margin: 40px 0 16px; line-height: 1.15; }
+.prose h3 { margin: 28px 0 12px; line-height: 1.2; }
+.prose ul, .prose ol { margin: 0 0 18px; padding-left: 24px; }
+.prose li + li { margin-top: 5px; }
+.prose img { margin: 24px 0; }
+.prose blockquote { margin: 24px 0; }
+.prose pre { margin: 24px 0; }
+.attachments { margin-top: 32px; }
+.docs-sidebar .nav-group { margin-bottom: 28px; }
+.docs-sidebar .nav-category { margin-bottom: 16px; }
+.docs-sidebar .nav-category p { margin-bottom: 7px; }
+.docs-sidebar .nav-category a { margin: 4px 0; }
+
 @media (max-width: 800px) {
 	.shell { padding: 0 16px 36px; }
 	.topbar { height: 62px; }
@@ -215,5 +237,8 @@
 	.docs-layout { padding-top: 18px; }
 	.docs-sidebar { margin-bottom: 24px; padding-bottom: 16px; }
 	.page-heading { margin-bottom: 28px; }
-	.doc-aside { margin-bottom: 26px; }
+	.doc-aside { margin-bottom: 24px; }
+	.document .lede { margin-bottom: 20px; }
+	.prose h2 { margin-top: 32px; }
+	.prose h3 { margin-top: 24px; }
 }
