@@ -262,6 +262,153 @@
             "originalText": "Chat Engine",
             "autoResize": true,
             "lineHeight": 1.25
+        },
+        {
+            "id": "visitor-to-widget",
+            "type": "arrow",
+            "x": 240,
+            "y": 220,
+            "width": 100,
+            "height": 0,
+            "angle": 0,
+            "strokeColor": "#71807a",
+            "backgroundColor": "transparent",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "strokeStyle": "solid",
+            "roughness": 0,
+            "opacity": 100,
+            "startArrowhead": null,
+            "endArrowhead": "arrow",
+            "points": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    100,
+                    0
+                ]
+            ],
+            "lastCommittedPoint": null,
+            "startBinding": {
+                "elementId": "visitor",
+                "focus": 0,
+                "gap": 8
+            },
+            "endBinding": {
+                "elementId": "widget",
+                "focus": 0,
+                "gap": 8
+            },
+            "boundElements": [],
+            "frameId": null,
+            "index": "a8",
+            "seed": 9,
+            "version": 1,
+            "versionNonce": 9,
+            "isDeleted": false,
+            "updated": 1,
+            "link": null,
+            "locked": false
+        },
+        {
+            "id": "widget-to-hub",
+            "type": "arrow",
+            "x": 500,
+            "y": 220,
+            "width": 100,
+            "height": 0,
+            "angle": 0,
+            "strokeColor": "#71807a",
+            "backgroundColor": "transparent",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "strokeStyle": "solid",
+            "roughness": 0,
+            "opacity": 100,
+            "startArrowhead": null,
+            "endArrowhead": "arrow",
+            "points": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    100,
+                    0
+                ]
+            ],
+            "lastCommittedPoint": null,
+            "startBinding": {
+                "elementId": "widget",
+                "focus": 0,
+                "gap": 8
+            },
+            "endBinding": {
+                "elementId": "hub",
+                "focus": 0,
+                "gap": 8
+            },
+            "boundElements": [],
+            "frameId": null,
+            "index": "a9",
+            "seed": 10,
+            "version": 1,
+            "versionNonce": 10,
+            "isDeleted": false,
+            "updated": 1,
+            "link": null,
+            "locked": false
+        },
+        {
+            "id": "hub-to-engine",
+            "type": "arrow",
+            "x": 760,
+            "y": 220,
+            "width": 100,
+            "height": 0,
+            "angle": 0,
+            "strokeColor": "#71807a",
+            "backgroundColor": "transparent",
+            "fillStyle": "solid",
+            "strokeWidth": 2,
+            "strokeStyle": "solid",
+            "roughness": 0,
+            "opacity": 100,
+            "startArrowhead": null,
+            "endArrowhead": "arrow",
+            "points": [
+                [
+                    0,
+                    0
+                ],
+                [
+                    100,
+                    0
+                ]
+            ],
+            "lastCommittedPoint": null,
+            "startBinding": {
+                "elementId": "hub",
+                "focus": 0,
+                "gap": 8
+            },
+            "endBinding": {
+                "elementId": "engine",
+                "focus": 0,
+                "gap": 8
+            },
+            "boundElements": [],
+            "frameId": null,
+            "index": "aa",
+            "seed": 11,
+            "version": 1,
+            "versionNonce": 11,
+            "isDeleted": false,
+            "updated": 1,
+            "link": null,
+            "locked": false
         }
     ],
     "appState": {

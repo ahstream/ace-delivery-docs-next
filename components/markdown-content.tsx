@@ -4,7 +4,10 @@ import mermaid from "mermaid";
 import dynamic from "next/dynamic";
 import { createRoot, type Root } from "react-dom/client";
 import { useEffect, useRef } from "react";
-import type { ExcalidrawInitialDataState } from "@excalidraw/excalidraw/types";
+import type {
+  ExcalidrawImperativeAPI,
+  ExcalidrawInitialDataState,
+} from "@excalidraw/excalidraw/types";
 import "@excalidraw/excalidraw/index.css";
 
 const Excalidraw = dynamic(
@@ -101,6 +104,15 @@ export function MarkdownContent({ html }: { html: string }) {
                 files: scene.files ?? {},
               }}
               viewModeEnabled
+              excalidrawAPI={(api: ExcalidrawImperativeAPI) => {
+                window.requestAnimationFrame(() => {
+                  api.scrollToContent(scene.elements ?? [], {
+                    fitToViewport: true,
+                    viewportZoomFactor: 0.88,
+                    animate: false,
+                  });
+                });
+              }}
               UIOptions={{
                 canvasActions: {
                   changeViewBackgroundColor: false,

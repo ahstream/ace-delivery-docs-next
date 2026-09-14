@@ -1,4 +1,4 @@
- .excalidraw-diagram { height: 560px; margin: 32px 0; overflow: hidden; border: 1px solid var(--line); background: #fbfcfa; }
+ .excalidraw-diagram { aspect-ratio: 2.6 / 1; min-height: 260px; margin: 32px 0; overflow: hidden; border: 1px solid var(--line); background: #fbfcfa; }
  .excalidraw-diagram .excalidraw { --default-border-color: var(--line); }
  .excalidraw-error { margin: 32px 0; padding: 16px; color: #9c3e2d; background: #f9ddd7; font: 13px "DM Mono", monospace; overflow-x: auto; }
  .mermaid-diagram { margin: 32px 0; overflow-x: auto; padding: 16px; background: #fbfcfa; border: 1px solid var(--line); }
@@ -69,6 +69,34 @@
 .page-heading .hero-copy { margin-bottom: 0; }
 .home-content { border-top: 1px solid var(--line); padding-top: 30px; }
 .home-grid { display: block; border-top: 0; padding-top: 0; }
+.doc-layout {
+	display: block;
+	max-width: none;
+}
+.doc-aside {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 12px 20px;
+	border-bottom: 1px solid var(--line);
+	margin-bottom: 48px;
+	padding: 0 0 18px;
+}
+.doc-aside .eyebrow,
+.doc-aside .version-label { margin: 0; }
+.doc-aside .eyebrow { flex-basis: 100%; }
+.doc-aside .aside-links,
+.doc-aside .github-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 18px;
+	font-size: 12px;
+}
+.doc-aside .github-links {
+	margin-left: auto;
+	color: var(--muted);
+}
+.document { max-width: none; }
 
 @media (max-width: 800px) {
 	.docs-layout { display: block; padding-top: 24px; }
@@ -85,4 +113,35 @@
 	.nav-group { margin-bottom: 12px; }
 	.nav-category { margin-bottom: 12px; }
 	.page-heading { margin: 4px 0 40px; }
+	.doc-aside {
+		align-items: flex-start;
+		margin-bottom: 34px;
+	}
+	.doc-aside .github-links { margin-left: 0; }
+}
+
+/* Compact documentation spacing */
+.shell { padding: 0 32px 48px; }
+.topbar { height: 68px; }
+.docs-layout { gap: 36px; padding-top: 24px; }
+.docs-sidebar { padding-right: 20px; }
+.docs-sidebar .eyebrow { margin-bottom: 20px; }
+.nav-group { margin-bottom: 24px; }
+.nav-group h2 { margin-bottom: 10px; }
+.nav-category { margin-bottom: 12px; padding-left: 10px; }
+.nav-category a { margin: 5px 0; }
+.page-heading { margin: 4px 0 34px; }
+.home-content { padding-top: 22px; }
+.doc-aside { margin-bottom: 32px; padding-bottom: 12px; }
+.breadcrumbs { padding: 18px 0; }
+.section-heading { margin-bottom: 20px; }
+.doc-card { padding: 18px; }
+
+@media (max-width: 800px) {
+	.shell { padding: 0 16px 36px; }
+	.topbar { height: 62px; }
+	.docs-layout { padding-top: 18px; }
+	.docs-sidebar { margin-bottom: 24px; padding-bottom: 16px; }
+	.page-heading { margin-bottom: 28px; }
+	.doc-aside { margin-bottom: 26px; }
 }

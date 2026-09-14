@@ -252,7 +252,10 @@ export function getBreadcrumbs(document: DocumentVersion): Breadcrumb[] {
   const parent = document.section ?? document.topic ?? "";
   return [
     { label: scope === "general" ? "General" : "Topics", href: "/" },
-    { label: parent.replaceAll("-", " ") },
+    {
+      label: parent.replaceAll("-", " "),
+      href: `/docs/${scope}/${parent}`,
+    },
     { label: document.title },
   ];
 }

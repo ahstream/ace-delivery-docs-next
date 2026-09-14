@@ -1,0 +1,49 @@
+import Link from "next/link";
+import { getNavigation } from "@/lib/content";
+
+export function DocsLayout({
+  children,
+  headerLink,
+}: {
+  children: React.ReactNode;
+  headerLink?: React.ReactNode;
+}) {
+  const navigation = getNavigation();
+
+  return (
+    <main className="shell">
+      <header className="topbar">
+        <Link className="brand" href="/">
+          Telia <span>ACE</span> Delivery Docs
+        </Link>
+        <nav>
+          <Link href="/search">Search</Link>
+          {headerLink ?? (
+            <a href="https://github.com/example/documentation">GitHub</a>
+          )}
+        </nav>
+      </header>
+      <div className="docs-layout">
+        <aside className="docs-sidebar" aria-label="Documentation navigation">
+          <p className="eyebrow">Browse library</p>
+          {navigation.map((group) => (
+            <section className="nav-group" key={group.label}>
+              <h2>{group.label}</h2>
+              {group.children?.map((category) => (
+                <div className="nav-category" key={category.label}>
+                  <p>{category.label}</p>
+                  {category.children?.map((item) => (
+                    <Link key={item.href} href={item.href ?? "#"}>
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </section>
+          ))}
+        </aside>
+        <section className="docs-content">{children}</section>
+      </div>
+    </main>
+  );
+}
