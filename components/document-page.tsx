@@ -4,6 +4,7 @@ import { renderMarkdown } from "@/lib/markdown";
 import type { DocumentVersion } from "@/lib/types";
 import { MarkdownContent } from "./markdown-content";
 import { VersionSelector } from "./version-selector";
+import { DocsLayout } from "./docs-layout";
 
 export async function DocumentPage({
   document,
@@ -22,16 +23,7 @@ export async function DocumentPage({
   const base = `/docs/${document.section ? "general" : "topics"}/${document.section ?? document.topic}/${document.slug}`;
   const github = getGitHubUrls(document);
   return (
-    <main className="shell">
-      <header className="topbar">
-        <Link className="brand" href="/">
-          Telia <span>ACE</span> Delivery Docs
-        </Link>
-        <nav>
-          <Link href="/search">Search</Link>
-          <a href={github.source}>GitHub ↗</a>
-        </nav>
-      </header>
+    <DocsLayout headerLink={<a href={github.source}>GitHub ↗</a>}>
       <div className="breadcrumbs">
         {getBreadcrumbs(document).map((crumb, index) => (
           <span key={crumb.label}>
@@ -125,6 +117,6 @@ export async function DocumentPage({
           )}
         </article>
       </div>
-    </main>
+    </DocsLayout>
   );
 }
