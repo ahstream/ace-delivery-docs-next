@@ -10,6 +10,7 @@ export type DocumentStatus = (typeof DOCUMENT_STATUSES)[number];
 export interface DocumentMetadata {
   id: string;
   title: string;
+  shortTitle?: string;
   description?: string;
   version: string;
   status: DocumentStatus;
@@ -59,6 +60,7 @@ export interface DocumentSummary {
   id: string;
   slug: string;
   title: string;
+  shortTitle?: string;
   description?: string;
   category?: string;
   topic?: string;

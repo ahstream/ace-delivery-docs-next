@@ -70,6 +70,7 @@ function validateMetadata(
   return {
     id: String(data.id),
     title: String(data.title),
+    shortTitle: data.shortTitle ? String(data.shortTitle) : undefined,
     description: data.description ? String(data.description) : undefined,
     version: parseVersion(data.version),
     status,
@@ -214,6 +215,7 @@ export function getSummaries(): DocumentSummary[] {
       id: latest.id,
       slug: latest.slug,
       title: latest.title,
+      shortTitle: latest.shortTitle,
       description: latest.description,
       category: latest.category,
       topic: latest.topic,
@@ -239,7 +241,7 @@ export function getNavigation(): NavigationNode[] {
       label: group.replaceAll("-", " "),
       kind: "group" as const,
       children: documents.map((document) => ({
-        label: document.title,
+        label: document.shortTitle ?? document.title,
         kind: "document" as const,
         href: `/docs/${scope}/${group}/${document.slug}`,
       })),
