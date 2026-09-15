@@ -33,12 +33,15 @@ export async function generateMetadata({
   );
   return item
     ? {
-        title: `${item.title} v${item.version}`,
-        description: item.description,
+        title: `${item.pageTitle} v${item.version}`,
+        description: item.pageDescription,
         alternates: {
           canonical: `/${section}/${scope}/${parent}/${document}/v${item.version}`,
         },
-        openGraph: { title: item.title, description: item.description },
+        openGraph: {
+          title: item.pageTitle,
+          description: item.pageDescription,
+        },
       }
     : {};
 }

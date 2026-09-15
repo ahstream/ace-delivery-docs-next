@@ -2,7 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 
 const docsRoot = path.join(process.cwd(), "docs");
-const required = ["id", "title", "version", "status", "author", "owner"];
+const required = ["pageTitle", "status", "author", "owner"];
+const removed = ["approved", "published"];
 const statuses = new Set([
   "draft",
   "review",
@@ -37,12 +38,27 @@ visit(docsRoot);
 const keys = new Set();
 for (const filePath of markdownFiles) {
   const metadata = frontmatter(filePath);
+  const filename = path.basename(filePath, ".md");
+  const versionMatch = filename.match(/^v(.+)$/i);
+  if (!versionMatch)
+    throw new Error(`${filePath} must use a version filename such as v33.1.md`);
+  const version = versionMatch[1].replace(/^v/i, "");
+  if (!/^\d+(?:\.\d+){0,2}(?:-[0-9A-Za-z.-]+)?$/.test(version))
+    throw new Error(
+      `${filePath} has an invalid version filename: ${filename}.md`,
+    );
   for (const field of required)
     if (!metadata[field])
       throw new Error(`${filePath} is missing required metadata: ${field}`);
+  for (const field of removed)
+    if (Object.hasOwn(metadata, field))
+      throw new Error(`${filePath} uses removed metadata: ${field}`);
   if (!statuses.has(metadata.status))
     throw new Error(`${filePath} has unsupported status: ${metadata.status}`);
-  const key = `${metadata.id}:${metadata.version}`;
+  const relative = path.relative(docsRoot, filePath).replaceAll("\\", "/");
+  const pathParts = relative.split("/");
+  const id = pathParts.slice(0, -1).join("/");
+  const key = `${id}:${version}`;
   if (keys.has(key)) throw new Error(`Duplicate document version: ${key}`);
   keys.add(key);
 }

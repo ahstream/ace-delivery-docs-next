@@ -30,8 +30,8 @@ Content lives under a section-first filesystem structure such as `docs/delivery/
 
 ## GitOps workflow
 
-1. Add or change a versioned Markdown file in a pull request.
-2. Include required frontmatter: `id`, `title`, `version`, `status`, `author`, and `owner`.
+1. Add or change a versioned Markdown file in a pull request. Use a filename such as `v33.1.md`; the filename is the source of truth for the document version.
+2. Include required frontmatter: `id`, `title`, `status`, `author`, and `owner`.
 3. Set `status: review` until ownership and approval metadata are complete.
 4. Merge to `main`; GitHub Actions validates metadata, type-checks, lints, builds SSG output, and creates the Pagefind index.
 5. Deploy the generated Next.js output to the hosting provider of choice.
@@ -70,3 +70,15 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Metadata
+
+### status
+
+The five supported values are:
+
+draft: Work in progress and not ready for publication.
+review: Ready for review or currently undergoing review.
+published: Officially released. This status is used when selecting the latest published version and gives the version higher sitemap priority.
+deprecated: Still available, but should no longer be used for new work.
+archived: Retained for historical reference and generally no longer active.

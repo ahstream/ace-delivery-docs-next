@@ -8,11 +8,13 @@ export function GET() {
     process.env.NEXT_PUBLIC_SITE_URL ??
     `https://ahstream.github.io${siteBasePath}`;
   const entries = getAllVersions()
-    .filter((item) => item.published)
-    .sort((a, b) => String(b.published).localeCompare(String(a.published)))
+    .filter((item) => item.publishedDate)
+    .sort((a, b) =>
+      String(b.publishedDate).localeCompare(String(a.publishedDate)),
+    )
     .map(
       (item) =>
-        `<entry><title>${item.title} v${item.version}</title><link href="${base}/${item.siteSection}/${item.scope}/${item.parent}/${item.slug}/v${item.version}"/><updated>${item.published}</updated><id>${item.id}-${item.version}</id><summary>${item.description ?? ""}</summary></entry>`,
+        `<entry><title>${item.pageTitle} v${item.version}</title><link href="${base}/${item.siteSection}/${item.scope}/${item.parent}/${item.slug}/v${item.version}"/><updated>${item.publishedDate}</updated><id>${item.id}-${item.version}</id><summary>${item.pageDescription ?? ""}</summary></entry>`,
     )
     .join("");
   return new Response(

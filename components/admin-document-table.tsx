@@ -6,14 +6,14 @@ import { SITE_SECTIONS } from "@/lib/types";
 
 export interface AdminDocument {
   id: string;
-  title: string;
+  pageTitle: string;
   version: string;
   status: string;
   owner: string;
   author: string;
-  approved?: boolean;
   approvedDate?: string;
-  published?: string;
+  publishedDate?: string;
+  updatedDate?: string;
   siteSection: string;
   scope: string;
   parent: string;
@@ -23,15 +23,15 @@ export interface AdminDocument {
 }
 
 type SortKey =
-  | "title"
+  | "pageTitle"
   | "siteSection"
   | "version"
   | "status"
   | "owner"
   | "author"
-  | "approved"
   | "approvedDate"
-  | "published"
+  | "publishedDate"
+  | "updatedDate"
   | "age";
 type SortDirection = "ascending" | "descending";
 
@@ -75,12 +75,10 @@ function compareDocuments(
 ): number {
   if (sortKey === "version")
     return compareVersions(left.version, right.version);
-  if (sortKey === "approved")
-    return Number(Boolean(left.approved)) - Number(Boolean(right.approved));
   if (sortKey === "age")
     return (
-      (getAgeDays(left.published) ?? Number.POSITIVE_INFINITY) -
-      (getAgeDays(right.published) ?? Number.POSITIVE_INFINITY)
+      (getAgeDays(left.updatedDate) ?? Number.POSITIVE_INFINITY) -
+      (getAgeDays(right.updatedDate) ?? Number.POSITIVE_INFINITY)
     );
 
   const leftValue = left[sortKey] ?? "";
@@ -95,7 +93,7 @@ export function AdminDocumentTable({
 }) {
   const [latestOnly, setLatestOnly] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string | undefined>();
-  const [sortKey, setSortKey] = useState<SortKey>("title");
+  const [sortKey, setSortKey] = useState<SortKey>("pageTitle");
   const [sortDirection, setSortDirection] =
     useState<SortDirection>("ascending");
   const latestById = new Map<string, AdminDocument>();
@@ -185,15 +183,15 @@ export function AdminDocumentTable({
           <caption>{visibleDocuments.length} document versions</caption>
           <thead>
             <tr>
-              {renderHeader("Document", "title")}
+              {renderHeader("Document", "pageTitle")}
               {renderHeader("Section", "siteSection")}
               {renderHeader("Version", "version")}
               {renderHeader("Status", "status")}
               {renderHeader("Owner", "owner")}
               {renderHeader("Author", "author")}
-              {renderHeader("Approved", "approved")}
               {renderHeader("Approved date", "approvedDate")}
-              {renderHeader("Published", "published")}
+              {renderHeader("Published date", "publishedDate")}
+              {renderHeader("Updated date", "updatedDate")}
               {renderHeader("Age", "age")}
             </tr>
           </thead>
@@ -204,7 +202,7 @@ export function AdminDocumentTable({
               return (
                 <tr key={document.sourcePath}>
                   <th scope="row">
-                    <Link href={href}>{document.title}</Link>
+                    <Link href={href}>{document.pageTitle}</Link>
                   </th>
                   <td>{document.siteSection}</td>
                   <td>v{document.version}</td>
@@ -215,13 +213,13 @@ export function AdminDocumentTable({
                   </td>
                   <td>{document.owner}</td>
                   <td>{document.author}</td>
-                  <td>{document.approved ? "Yes" : "No"}</td>
                   <td>{formatDate(document.approvedDate)}</td>
-                  <td>{formatDate(document.published)}</td>
+                  <td>{formatDate(document.publishedDate)}</td>
+                  <td>{formatDate(document.updatedDate)}</td>
                   <td>
-                    {getAgeDays(document.published) === undefined
+                    {getAgeDays(document.updatedDate) === undefined
                       ? "-"
-                      : `${getAgeDays(document.published)} days`}
+                      : `${getAgeDays(document.updatedDate)} days`}
                   </td>
                 </tr>
               );

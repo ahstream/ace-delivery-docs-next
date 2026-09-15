@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     `https://ahstream.github.io${siteBasePath}`;
   return getAllVersions().map((item) => ({
     url: `${base}/${item.siteSection}/${item.scope}/${item.parent}/${item.slug}/v${item.version}`,
-    lastModified: item.published ? new Date(item.published) : undefined,
+    lastModified: item.updatedDate ? new Date(item.updatedDate) : undefined,
     changeFrequency: "monthly",
     priority: item.status === "published" ? 0.8 : 0.4,
   }));

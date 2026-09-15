@@ -61,9 +61,10 @@ export default async function SectionPage({
                 </span>
                 <span>v{document.latestVersion}</span>
               </div>
-              <h3 className="section-document-title">{document.title}</h3>
+              <h3 className="section-document-title">{document.pageTitle}</h3>
               <p>
-                {document.description ?? "Maintained guidance for ACE teams."}
+                {document.pageDescription ??
+                  "Maintained guidance for ACE teams."}
               </p>
             </Link>
           ))}

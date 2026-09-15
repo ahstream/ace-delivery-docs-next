@@ -17,21 +17,19 @@ export const SITE_SECTIONS: SiteSection[] = [
 
 export interface DocumentMetadata {
   id: string;
-  title: string;
+  pageTitle: string;
+  pageDescription?: string;
   navbarTitle?: string;
-  description?: string;
   version: string;
   status: DocumentStatus;
   author: string;
   owner: string;
-  reviewer?: string;
-  approved?: boolean;
   approvedDate?: string;
-  published?: string;
+  publishedDate?: string;
+  updatedDate?: string;
   supersedes?: string;
   tags: string[];
-  category?: string;
-  navbarCategory?: string;
+  navbarParent?: string;
 }
 
 export interface AssetMetadata {
@@ -70,11 +68,10 @@ export interface DocumentContent {
 export interface DocumentSummary {
   id: string;
   slug: string;
-  title: string;
+  pageTitle: string;
+  pageDescription?: string;
   navbarTitle?: string;
-  description?: string;
-  category?: string;
-  navbarCategory?: string;
+  navbarParent?: string;
   topic?: string;
   siteSection: SiteSection;
   scope: DocumentScope;
@@ -95,7 +92,6 @@ export interface SearchDocument {
   url: string;
   title: string;
   version: string;
-  category?: string;
   topic?: string;
   status: DocumentStatus;
   tags: string[];

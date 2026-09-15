@@ -1,6 +1,7 @@
 "use client";
 
 import type { DocumentVersion } from "@/lib/types";
+import { withBasePath } from "@/lib/site";
 
 export function VersionSelector({
   base,
@@ -16,7 +17,7 @@ export function VersionSelector({
       aria-label="Document version"
       defaultValue={current}
       onChange={(event) => {
-        window.location.href = new URL(`${base}/v${event.target.value}`, window.location.origin).toString();
+        window.location.href = withBasePath(`${base}/v${event.target.value}`);
       }}
     >
       {versions.map((version) => (

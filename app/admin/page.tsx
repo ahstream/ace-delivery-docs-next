@@ -9,20 +9,20 @@ export default function AdminPage() {
   const documents: AdminDocument[] = getAllVersions()
     .sort(
       (left, right) =>
-        left.title.localeCompare(right.title) ||
+        left.pageTitle.localeCompare(right.pageTitle) ||
         right.version.localeCompare(left.version),
     )
     .map(
       ({
         id,
-        title,
+        pageTitle,
         version,
         status,
         owner,
         author,
-        approved,
         approvedDate,
-        published,
+        publishedDate,
+        updatedDate,
         siteSection,
         scope,
         parent,
@@ -31,14 +31,14 @@ export default function AdminPage() {
         sourcePath,
       }) => ({
         id,
-        title,
+        pageTitle,
         version,
         status,
         owner,
         author,
-        approved,
         approvedDate,
-        published,
+        publishedDate,
+        updatedDate,
         siteSection,
         scope,
         parent,

@@ -80,9 +80,9 @@ export async function DocumentPage({
             <span>v{document.version}</span>
             <span>{document.readTime} min read</span>
           </div>
-          <h1>{document.title}</h1>
-          {document.description && (
-            <p className="lede">{document.description}</p>
+          <h1>{document.pageTitle}</h1>
+          {document.pageDescription && (
+            <p className="lede">{document.pageDescription}</p>
           )}
           <div className="meta-grid">
             <div>
@@ -94,16 +94,16 @@ export async function DocumentPage({
               <strong>{document.author}</strong>
             </div>
             <div>
-              <span>REVIEWER</span>
-              <strong>{document.reviewer ?? "Not assigned"}</strong>
-            </div>
-            <div>
               <span>APPROVAL</span>
               <strong>
-                {document.approved
+                {document.approvedDate
                   ? `Approved ${formatApprovalDate(document.approvedDate)}`
                   : "Pending review"}
               </strong>
+            </div>
+            <div>
+              <span>UPDATED</span>
+              <strong>{formatApprovalDate(document.updatedDate)}</strong>
             </div>
           </div>
           <div className="tag-row large">

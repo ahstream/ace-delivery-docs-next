@@ -1,5 +1,6 @@
 import "server-only";
 
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
@@ -42,8 +43,7 @@ const assetExtensions = new Set([
 ]);
 
 function parseVersion(value: unknown): string {
-  let version = String(value ?? "").replace(/^v/, "");
-  if (/^\d+$/.test(version)) version = `${version}.0`;
+  const version = String(value ?? "").replace(/^v/, "");
   if (!semver.valid(semver.coerce(version)))
     throw new Error(`Invalid document version: ${version}`);
   return version;
@@ -59,11 +59,25 @@ function compareVersions(
   );
 }
 
+function getUpdatedDate(filePath: string, relativePath: string): string {
+  try {
+    const gitDate = execFileSync(
+      "git",
+      ["log", "-1", "--format=%cI", "--", relativePath],
+      { cwd: process.cwd(), encoding: "utf8" },
+    ).trim();
+    if (gitDate) return gitDate;
+  } catch {}
+  return fs.statSync(filePath).mtime.toISOString();
+}
+
 function validateMetadata(
   data: Record<string, unknown>,
   filePath: string,
+  version: string,
+  id: string,
 ): DocumentMetadata {
-  const required = ["id", "title", "version", "status", "author", "owner"];
+  const required = ["pageTitle", "status", "author", "owner"];
   for (const field of required)
     if (!data[field])
       throw new Error(`${filePath} is missing required metadata: ${field}`);
@@ -71,24 +85,21 @@ function validateMetadata(
   if (!DOCUMENT_STATUSES.includes(status))
     throw new Error(`${filePath} has an unsupported status: ${status}`);
   return {
-    id: String(data.id),
-    title: String(data.title),
+    id,
+    pageTitle: String(data.pageTitle),
+    pageDescription: data.pageDescription
+      ? String(data.pageDescription)
+      : undefined,
     navbarTitle: data.navbarTitle ? String(data.navbarTitle) : undefined,
-    description: data.description ? String(data.description) : undefined,
-    version: parseVersion(data.version),
+    version,
     status,
     author: String(data.author),
     owner: String(data.owner),
-    reviewer: data.reviewer ? String(data.reviewer) : undefined,
-    approved: Boolean(data.approved),
     approvedDate: data.approvedDate ? String(data.approvedDate) : undefined,
-    published: data.published ? String(data.published) : undefined,
+    publishedDate: data.publishedDate ? String(data.publishedDate) : undefined,
     supersedes: data.supersedes ? parseVersion(data.supersedes) : undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
-    category: data.category ? String(data.category) : undefined,
-    navbarCategory: data.navbarCategory
-      ? String(data.navbarCategory)
-      : undefined,
+    navbarParent: data.navbarParent ? String(data.navbarParent) : undefined,
   };
 }
 
@@ -153,16 +164,23 @@ function parseFile(filePath: string): DocumentVersion {
   const scope = segments[1] as DocumentScope;
   const parent = segments[2] ?? "";
   const slug = segments.at(-2) ?? "";
+  const filename = path.basename(filePath, ".md");
+  const versionMatch = filename.match(/^v(.+)$/i);
+  if (!versionMatch)
+    throw new Error(`${relative} must use a version filename such as v33.1.md`);
+  const version = parseVersion(versionMatch[1]);
   if (!SITE_SECTIONS.includes(siteSection))
     throw new Error(
       `${relative} uses an unsupported site section: ${siteSection}`,
     );
   if (scope !== "general" && scope !== "topics")
     throw new Error(`${relative} uses an unsupported document scope: ${scope}`);
-  const version = validateMetadata(parsed.data, relative);
+  const id = [siteSection, scope, parent, slug].join("/");
+  const metadata = validateMetadata(parsed.data, relative, version, id);
   const documentDirectory = path.dirname(filePath);
   return {
-    ...version,
+    ...metadata,
+    updatedDate: getUpdatedDate(filePath, relative),
     slug,
     siteSection,
     scope,
@@ -232,11 +250,10 @@ export function getSummaries(): DocumentSummary[] {
     return {
       id: latest.id,
       slug: latest.slug,
-      title: latest.title,
+      pageTitle: latest.pageTitle,
       navbarTitle: latest.navbarTitle,
-      description: latest.description,
-      category: latest.category,
-      navbarCategory: latest.navbarCategory,
+      pageDescription: latest.pageDescription,
+      navbarParent: latest.navbarParent,
       siteSection: latest.siteSection,
       scope: latest.scope,
       parent: latest.parent,
@@ -256,14 +273,14 @@ export function getNavigation(siteSection: SiteSection): NavigationNode[] {
     summaries
       .filter((item) => item.scope === scope)
       .forEach((item) => {
-        const key = item.navbarCategory ?? item.parent;
+        const key = item.navbarParent ?? item.parent;
         groups.set(key, [...(groups.get(key) ?? []), item]);
       });
     return [...groups.entries()].map(([group, documents]) => ({
       label: group.replaceAll("-", " "),
       kind: "group" as const,
       children: documents.map((document) => ({
-        label: document.navbarTitle ?? document.title,
+        label: document.navbarTitle ?? document.pageTitle,
         kind: "document" as const,
         href: `/${siteSection}/${scope}/${document.parent}/${document.slug}`,
       })),
@@ -283,10 +300,9 @@ export function getBreadcrumbs(document: DocumentVersion): Breadcrumb[] {
       href: `/${document.siteSection}/${document.scope}`,
     },
     {
-      label: document.parent.replaceAll("-", " "),
-      href: `/${document.siteSection}/${document.scope}/${document.parent}`,
+      label: document.navbarParent ?? document.parent.replaceAll("-", " "),
     },
-    { label: document.title },
+    { label: document.navbarTitle ?? document.pageTitle },
   ];
 }
 
