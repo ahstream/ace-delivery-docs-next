@@ -5,6 +5,10 @@ import { PagefindSearch } from "@/components/pagefind-search";
 import { getAllVersions, SITE_SECTIONS } from "@/lib/content";
 import { siteBasePath } from "@/lib/site";
 
+export function generateStaticParams() {
+  return SITE_SECTIONS.map((section) => ({ section }));
+}
+
 export default async function SectionSearchPage({
   params,
 }: {
