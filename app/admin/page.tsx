@@ -23,7 +23,9 @@ export default function AdminPage() {
         approved,
         approvedDate,
         published,
-        section,
+        siteSection,
+        scope,
+        parent,
         topic,
         slug,
         sourcePath,
@@ -37,7 +39,9 @@ export default function AdminPage() {
         approved,
         approvedDate,
         published,
-        section,
+        siteSection,
+        scope,
+        parent,
         topic,
         slug,
         sourcePath,
@@ -45,7 +49,7 @@ export default function AdminPage() {
     );
 
   return (
-    <DocsLayout hideSidebar>
+    <DocsLayout section="admin">
       <div className="page-heading">
         <p className="eyebrow">Administration</p>
         <h1>Document inventory</h1>

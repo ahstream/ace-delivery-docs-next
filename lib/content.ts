@@ -12,8 +12,11 @@ import type {
   DocumentSummary,
   DocumentVersion,
   NavigationNode,
+  DocumentScope,
+  SiteSection,
 } from "./types";
-import { DOCUMENT_STATUSES } from "./types";
+import { DOCUMENT_STATUSES, SITE_SECTIONS } from "./types";
+export { SITE_SECTIONS } from "./types";
 
 const docsRoot = path.join(process.cwd(), "docs");
 const assetExtensions = new Set([
@@ -146,16 +149,25 @@ function parseFile(filePath: string): DocumentVersion {
   const parsed = matter(raw);
   const relative = path.relative(docsRoot, filePath).replaceAll("\\", "/");
   const segments = relative.split("/");
-  const scope = segments[0];
-  const parent = segments.slice(1, -1);
-  const slug = parent.at(-1) ?? "";
+  const siteSection = segments[0] as SiteSection;
+  const scope = segments[1] as DocumentScope;
+  const parent = segments[2] ?? "";
+  const slug = segments.at(-2) ?? "";
+  if (!SITE_SECTIONS.includes(siteSection))
+    throw new Error(
+      `${relative} uses an unsupported site section: ${siteSection}`,
+    );
+  if (scope !== "general" && scope !== "topics")
+    throw new Error(`${relative} uses an unsupported document scope: ${scope}`);
   const version = validateMetadata(parsed.data, relative);
   const documentDirectory = path.dirname(filePath);
   return {
     ...version,
     slug,
-    section: scope === "general" ? parent[0] : undefined,
-    topic: scope === "topics" ? parent[0] : undefined,
+    siteSection,
+    scope,
+    parent,
+    topic: scope === "topics" ? parent : undefined,
     contentPath: relative,
     sourcePath: `docs/${relative}`,
     content: parsed.content.trim(),
@@ -172,16 +184,18 @@ export function getAllVersions(): DocumentVersion[] {
 }
 
 export function getDocumentVersions(
-  scope: "general" | "topics",
+  siteSection: SiteSection,
+  scope: DocumentScope,
   parent: string,
   slug: string,
 ): DocumentVersion[] {
   return getAllVersions()
     .filter(
       (document) =>
-        (scope === "general"
-          ? document.section === parent
-          : document.topic === parent) && document.slug === slug,
+        document.siteSection === siteSection &&
+        document.scope === scope &&
+        document.parent === parent &&
+        document.slug === slug,
     )
     .sort(compareVersions);
 }
@@ -196,12 +210,13 @@ export function getLatestPublishedVersion(
 }
 
 export function getVersion(
-  scope: "general" | "topics",
+  siteSection: SiteSection,
+  scope: DocumentScope,
   parent: string,
   slug: string,
   version: string,
 ): DocumentVersion | undefined {
-  return getDocumentVersions(scope, parent, slug).find(
+  return getDocumentVersions(siteSection, scope, parent, slug).find(
     (document) => document.version === version.replace(/^v/, ""),
   );
 }
@@ -209,7 +224,7 @@ export function getVersion(
 export function getSummaries(): DocumentSummary[] {
   const groups = new Map<string, DocumentVersion[]>();
   for (const version of getAllVersions()) {
-    const key = `${version.section ?? version.topic}/${version.slug}`;
+    const key = `${version.siteSection}/${version.scope}/${version.parent}/${version.slug}`;
     groups.set(key, [...(groups.get(key) ?? []), version]);
   }
   return [...groups.values()].map((versions) => {
@@ -222,8 +237,9 @@ export function getSummaries(): DocumentSummary[] {
       description: latest.description,
       category: latest.category,
       navbarCategory: latest.navbarCategory,
-      topic: latest.topic,
-      section: latest.section,
+      siteSection: latest.siteSection,
+      scope: latest.scope,
+      parent: latest.parent,
       latestVersion: latest.version,
       status: latest.status,
       tags: latest.tags,
@@ -231,14 +247,16 @@ export function getSummaries(): DocumentSummary[] {
   });
 }
 
-export function getNavigation(): NavigationNode[] {
-  const summaries = getSummaries();
-  const makeTree = (scope: "general" | "topics") => {
+export function getNavigation(siteSection: SiteSection): NavigationNode[] {
+  const summaries = getSummaries().filter(
+    (item) => item.siteSection === siteSection,
+  );
+  const makeTree = (scope: DocumentScope) => {
     const groups = new Map<string, DocumentSummary[]>();
     summaries
-      .filter((item) => (scope === "general" ? item.section : item.topic))
+      .filter((item) => item.scope === scope)
       .forEach((item) => {
-        const key = item.navbarCategory ?? item.section ?? item.topic ?? "";
+        const key = item.navbarCategory ?? item.parent;
         groups.set(key, [...(groups.get(key) ?? []), item]);
       });
     return [...groups.entries()].map(([group, documents]) => ({
@@ -247,7 +265,7 @@ export function getNavigation(): NavigationNode[] {
       children: documents.map((document) => ({
         label: document.navbarTitle ?? document.title,
         kind: "document" as const,
-        href: `/docs/${scope}/${document.section ?? document.topic}/${document.slug}`,
+        href: `/${siteSection}/${scope}/${document.parent}/${document.slug}`,
       })),
     }));
   };
@@ -258,13 +276,15 @@ export function getNavigation(): NavigationNode[] {
 }
 
 export function getBreadcrumbs(document: DocumentVersion): Breadcrumb[] {
-  const scope = document.section ? "general" : "topics";
-  const parent = document.section ?? document.topic ?? "";
   return [
-    { label: scope === "general" ? "General" : "Topics", href: "/" },
+    { label: document.siteSection, href: `/${document.siteSection}` },
     {
-      label: parent.replaceAll("-", " "),
-      href: `/docs/${scope}/${parent}`,
+      label: document.scope === "general" ? "General" : "Topics",
+      href: `/${document.siteSection}/${document.scope}`,
+    },
+    {
+      label: document.parent.replaceAll("-", " "),
+      href: `/${document.siteSection}/${document.scope}/${document.parent}`,
     },
     { label: document.title },
   ];

@@ -5,29 +5,34 @@ import { getAllVersions, getSummaries } from "@/lib/content";
 export function generateStaticParams() {
   const groups = new Set(
     getAllVersions().map((item) => {
-      const scope = item.section ? "general" : "topics";
-      return `${scope}/${item.section ?? item.topic}`;
+      const scope = item.scope;
+      return `${item.siteSection}/${scope}/${item.parent}`;
     }),
   );
 
   return [...groups].map((value) => {
-    const [scope, parent] = value.split("/");
-    return { scope, parent };
+    const [section, scope, parent] = value.split("/");
+    return { section, scope, parent };
   });
 }
 
 export default async function CategoryPage({
   params,
 }: {
-  params: Promise<{ scope: string; parent: string }>;
+  params: Promise<{ section: string; scope: string; parent: string }>;
 }) {
-  const { scope, parent } = await params;
+  const { section, scope, parent } = await params;
   const documents = getSummaries().filter(
-    (item) => (scope === "general" ? item.section : item.topic) === parent,
+    (item) =>
+      item.siteSection === section &&
+      item.scope === scope &&
+      item.parent === parent,
   );
 
   return (
-    <DocsLayout>
+    <DocsLayout
+      section={section as "delivery" | "developer" | "customer" | "technology"}
+    >
       <div className="page-heading">
         <p className="eyebrow">{scope === "general" ? "General" : "Topics"}</p>
         <h1>{parent.replaceAll("-", " ")}</h1>
@@ -37,7 +42,7 @@ export default async function CategoryPage({
         {documents.map((document) => (
           <Link
             className="doc-card"
-            href={`/docs/${scope}/${parent}/${document.slug}`}
+            href={`/${section}/${scope}/${parent}/${document.slug}`}
             key={document.id}
           >
             <div className="card-top">

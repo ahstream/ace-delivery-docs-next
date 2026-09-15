@@ -26,7 +26,7 @@ npm run validate:docs
 npm run dev
 ```
 
-The sample content lives under `docs/general` and `docs/topics`. Put shared assets beside a document in its `assets/` directory. The content service discovers supported assets and exposes stable `/assets/...` paths.
+Content lives under a section-first filesystem structure such as `docs/delivery/general` or `docs/technology/topics`. Put shared assets beside a document in its `assets/` directory. The content service derives the section from that directory and exposes stable `/assets/...` paths.
 
 ## GitOps workflow
 

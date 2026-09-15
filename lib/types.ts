@@ -6,6 +6,14 @@ export const DOCUMENT_STATUSES = [
   "archived",
 ] as const;
 export type DocumentStatus = (typeof DOCUMENT_STATUSES)[number];
+export type SiteSection = "delivery" | "developer" | "customer" | "technology";
+export type DocumentScope = "general" | "topics";
+export const SITE_SECTIONS: SiteSection[] = [
+  "delivery",
+  "developer",
+  "customer",
+  "technology",
+];
 
 export interface DocumentMetadata {
   id: string;
@@ -41,8 +49,10 @@ export interface DiagramMetadata {
 }
 
 export interface DocumentVersion extends DocumentMetadata {
+  siteSection: SiteSection;
+  scope: DocumentScope;
+  parent: string;
   slug: string;
-  section?: string;
   topic?: string;
   contentPath: string;
   sourcePath: string;
@@ -66,7 +76,9 @@ export interface DocumentSummary {
   category?: string;
   navbarCategory?: string;
   topic?: string;
-  section?: string;
+  siteSection: SiteSection;
+  scope: DocumentScope;
+  parent: string;
   latestVersion: string;
   status: DocumentStatus;
   tags: string[];

@@ -16,7 +16,13 @@ interface PagefindModule {
   search: (term: string) => Promise<PagefindSearchResponse>;
 }
 
-export function PagefindSearch({ basePath }: { basePath: string }) {
+export function PagefindSearch({
+  basePath,
+  section,
+}: {
+  basePath: string;
+  section: string;
+}) {
   const [term, setTerm] = useState("");
   const [results, setResults] = useState<PagefindResult[]>([]);
   const [searched, setSearched] = useState(false);
@@ -38,8 +44,12 @@ export function PagefindSearch({ basePath }: { basePath: string }) {
         /* webpackIgnore: true */ `${basePath}/_pagefind/pagefind.js`
       )) as PagefindModule;
       const response = await pagefind.search(query);
+      const sectionPrefix = `${basePath}/${section}/`;
+      const matches = await Promise.all(
+        response.results.map((result) => result.data()),
+      );
       setResults(
-        await Promise.all(response.results.map((result) => result.data())),
+        matches.filter((result) => result.url.startsWith(sectionPrefix)),
       );
     } catch {
       setResults([]);

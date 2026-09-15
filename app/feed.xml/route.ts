@@ -12,7 +12,7 @@ export function GET() {
     .sort((a, b) => String(b.published).localeCompare(String(a.published)))
     .map(
       (item) =>
-        `<entry><title>${item.title} v${item.version}</title><link href="${base}/docs/${item.section ? "general" : "topics"}/${item.section ?? item.topic}/${item.slug}/v${item.version}"/><updated>${item.published}</updated><id>${item.id}-${item.version}</id><summary>${item.description ?? ""}</summary></entry>`,
+        `<entry><title>${item.title} v${item.version}</title><link href="${base}/${item.siteSection}/${item.scope}/${item.parent}/${item.slug}/v${item.version}"/><updated>${item.published}</updated><id>${item.id}-${item.version}</id><summary>${item.description ?? ""}</summary></entry>`,
     )
     .join("");
   return new Response(

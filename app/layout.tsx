@@ -8,8 +8,8 @@ export const metadata: Metadata = {
       `https://ahstream.github.io${siteBasePath}`,
   ),
   title: {
-    default: "Telia ACE Delivery Docs",
-    template: "%s | Northstar Docs",
+    default: "Telia ACE Docs",
+    template: "%s | Telia ACE Docs",
   },
   description:
     "Versioned engineering documentation for identity and platform teams.",

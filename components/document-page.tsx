@@ -23,17 +23,17 @@ export async function DocumentPage({
   document: DocumentVersion;
   versions: DocumentVersion[];
 }) {
-  const assetBase = `${siteBasePath}/assets/${document.section ? "general" : "topics"}/${document.section ?? document.topic}/${document.slug}`;
+  const assetBase = `${siteBasePath}/assets/${document.siteSection}/${document.scope}/${document.parent}/${document.slug}`;
   const html = await renderMarkdown(document.content, assetBase);
   const currentIndex = versions.findIndex(
     (version) => version.version === document.version,
   );
   const newer = versions[currentIndex - 1];
   const older = versions[currentIndex + 1];
-  const base = `/docs/${document.section ? "general" : "topics"}/${document.section ?? document.topic}/${document.slug}`;
+  const base = `/${document.siteSection}/${document.scope}/${document.parent}/${document.slug}`;
   const github = getGitHubUrls(document);
   return (
-    <DocsLayout>
+    <DocsLayout section={document.siteSection}>
       <div className="breadcrumbs">
         {getBreadcrumbs(document).map((crumb, index) => (
           <span key={crumb.label}>

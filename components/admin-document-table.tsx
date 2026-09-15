@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { SITE_SECTIONS } from "@/lib/types";
 
 export interface AdminDocument {
   id: string;
@@ -13,7 +14,9 @@ export interface AdminDocument {
   approved?: boolean;
   approvedDate?: string;
   published?: string;
-  section?: string;
+  siteSection: string;
+  scope: string;
+  parent: string;
   topic?: string;
   slug: string;
   sourcePath: string;
@@ -21,6 +24,7 @@ export interface AdminDocument {
 
 type SortKey =
   | "title"
+  | "siteSection"
   | "version"
   | "status"
   | "owner"
@@ -90,6 +94,7 @@ export function AdminDocumentTable({
   documents: AdminDocument[];
 }) {
   const [latestOnly, setLatestOnly] = useState(false);
+  const [selectedSection, setSelectedSection] = useState<string | undefined>();
   const [sortKey, setSortKey] = useState<SortKey>("title");
   const [sortDirection, setSortDirection] =
     useState<SortDirection>("ascending");
@@ -101,9 +106,14 @@ export function AdminDocumentTable({
       latestById.set(document.id, document);
   }
 
-  const filteredDocuments = latestOnly
-    ? documents.filter((document) => latestById.get(document.id) === document)
+  const sectionDocuments = selectedSection
+    ? documents.filter((document) => document.siteSection === selectedSection)
     : documents;
+  const filteredDocuments = latestOnly
+    ? sectionDocuments.filter(
+        (document) => latestById.get(document.id) === document,
+      )
+    : sectionDocuments;
   const visibleDocuments = [...filteredDocuments].sort((left, right) => {
     const comparison = compareDocuments(left, right, sortKey);
     return sortDirection === "ascending" ? comparison : -comparison;
@@ -142,6 +152,25 @@ export function AdminDocumentTable({
   return (
     <>
       <div className="admin-toolbar">
+        <div className="admin-section-filters" aria-label="Filter by section">
+          <button
+            className={`admin-filter-button${selectedSection === undefined ? " active" : ""}`}
+            onClick={() => setSelectedSection(undefined)}
+            type="button"
+          >
+            All sections
+          </button>
+          {SITE_SECTIONS.map((section) => (
+            <button
+              className={`admin-filter-button${selectedSection === section ? " active" : ""}`}
+              key={section}
+              onClick={() => setSelectedSection(section)}
+              type="button"
+            >
+              {section}
+            </button>
+          ))}
+        </div>
         <label className="admin-checkbox">
           <input
             checked={latestOnly}
@@ -157,6 +186,7 @@ export function AdminDocumentTable({
           <thead>
             <tr>
               {renderHeader("Document", "title")}
+              {renderHeader("Section", "siteSection")}
               {renderHeader("Version", "version")}
               {renderHeader("Status", "status")}
               {renderHeader("Owner", "owner")}
@@ -169,15 +199,14 @@ export function AdminDocumentTable({
           </thead>
           <tbody>
             {visibleDocuments.map((document) => {
-              const scope = document.section ? "general" : "topics";
-              const parent = document.section ?? document.topic ?? "";
-              const href = `/docs/${scope}/${parent}/${document.slug}/v${document.version}`;
+              const href = `/${document.siteSection}/${document.scope}/${document.parent}/${document.slug}/v${document.version}`;
 
               return (
                 <tr key={document.sourcePath}>
                   <th scope="row">
                     <Link href={href}>{document.title}</Link>
                   </th>
+                  <td>{document.siteSection}</td>
                   <td>v{document.version}</td>
                   <td>
                     <span className={`status status-${document.status}`}>

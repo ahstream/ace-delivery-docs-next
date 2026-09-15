@@ -5,8 +5,9 @@ import { getAllVersions, getDocumentVersions, getVersion } from "@/lib/content";
 
 export function generateStaticParams() {
   return getAllVersions().map((item) => ({
-    scope: item.section ? "general" : "topics",
-    parent: item.section ?? item.topic,
+    section: item.siteSection,
+    scope: item.scope,
+    parent: item.parent,
     document: item.slug,
     version: `v${item.version}`,
   }));
@@ -15,14 +16,16 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{
+    section: string;
     scope: string;
     parent: string;
     document: string;
     version: string;
   }>;
 }): Promise<Metadata> {
-  const { scope, parent, document, version } = await params;
+  const { section, scope, parent, document, version } = await params;
   const item = getVersion(
+    section as "delivery" | "developer" | "customer" | "technology",
     scope as "general" | "topics",
     parent,
     document,
@@ -33,7 +36,7 @@ export async function generateMetadata({
         title: `${item.title} v${item.version}`,
         description: item.description,
         alternates: {
-          canonical: `/docs/${scope}/${parent}/${document}/v${item.version}`,
+          canonical: `/${section}/${scope}/${parent}/${document}/v${item.version}`,
         },
         openGraph: { title: item.title, description: item.description },
       }
@@ -43,19 +46,22 @@ export default async function VersionPage({
   params,
 }: {
   params: Promise<{
+    section: string;
     scope: string;
     parent: string;
     document: string;
     version: string;
   }>;
 }) {
-  const { scope, parent, document, version } = await params;
+  const { section, scope, parent, document, version } = await params;
   const versions = getDocumentVersions(
+    section as "delivery" | "developer" | "customer" | "technology",
     scope as "general" | "topics",
     parent,
     document,
   );
   const current = getVersion(
+    section as "delivery" | "developer" | "customer" | "technology",
     scope as "general" | "topics",
     parent,
     document,

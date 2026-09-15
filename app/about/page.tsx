@@ -5,7 +5,7 @@ export default function AboutPage() {
     <DocsLayout hideSidebar>
       <div className="page-heading">
         <p className="eyebrow">About</p>
-        <h1>About the delivery docs</h1>
+        <h1>About ACE Docs</h1>
         <p className="hero-copy">
           A versioned home for practical guidance about building, configuring,
           and operating Telia ACE.
