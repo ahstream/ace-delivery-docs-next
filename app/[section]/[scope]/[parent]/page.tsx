@@ -52,7 +52,9 @@ export default async function CategoryPage({
               <span>v{document.latestVersion}</span>
             </div>
             <h2>{document.pageTitle}</h2>
-            <p>{document.description ?? "Versioned delivery documentation."}</p>
+            <p>
+              {document.pageDescription ?? "Versioned delivery documentation."}
+            </p>
           </Link>
         ))}
       </div>
